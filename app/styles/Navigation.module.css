@@ -1,0 +1,16 @@
+.list {
+  background-color: black;
+  padding: 20px 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+.item a {
+  font-family: var(--font-orbitron);
+  color: white;
+  text-decoration: none;
+}
+.bar {
+  border-right: 1px solid white;
+}
