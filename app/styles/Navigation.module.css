@@ -14,3 +14,7 @@
 .bar {
   border-right: 1px solid white;
 }
+.title {
+  font-family: var(--font-orbitron);
+  color: #40e0d0;
+}
