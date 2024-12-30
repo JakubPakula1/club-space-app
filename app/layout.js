@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Inter, Orbitron, Rajdhani } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Orbitron } from "next/font/google";
 import "./styles/globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
@@ -20,7 +20,6 @@ export const metadata = {
   title: "ClubSpace",
   description: "Platform created to connect clubs of p",
 };
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={orbitron.variable}>
