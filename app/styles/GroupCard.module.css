@@ -10,6 +10,7 @@
   background-color: rgb(68, 59, 59);
   padding: 20px;
   margin: 20px;
+  border: 1px solid #40e0d0;
 }
 .name {
   color: white;

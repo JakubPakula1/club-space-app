@@ -14,7 +14,8 @@
 .bar {
   border-right: 1px solid white;
 }
-.title {
+.title a {
+  text-decoration: none;
   font-family: var(--font-orbitron);
   color: #40e0d0;
 }

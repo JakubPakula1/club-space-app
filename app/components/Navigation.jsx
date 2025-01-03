@@ -11,7 +11,9 @@ export default function Navigation() {
       <li className={navigation.item}>
         <Link href="/groups">All groups</Link>
       </li>
-      <li className={navigation.title}>CLUBSPACE</li>
+      <li className={navigation.title}>
+        <Link href="/groups">CLUBSPACE</Link>
+      </li>
       <li className={navigation.item}>
         <Link href="#">Your Groups</Link>
       </li>

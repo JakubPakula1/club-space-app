@@ -10,6 +10,7 @@
   padding: 20px 40px;
   font-size: 30px;
   font-weight: bold;
+  font-family: var(--font-orbitron);
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.5s ease, color 0.5s ease;
