@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import styles from "../styles/Auth.module.css";
+import { useRouter } from "next/navigation";
 
 export default function Auth() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -42,6 +43,7 @@ export default function Auth() {
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
+      router.push("/");
     } catch (err) {
       setError(err.message);
     }

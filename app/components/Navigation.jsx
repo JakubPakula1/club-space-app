@@ -1,27 +1,26 @@
 import Link from "next/link";
 import navigation from "@/app/styles/Navigation.module.css";
+
 export default function Navigation() {
   return (
-    <ul className={navigation.list}>
-      <li className={navigation.bar}></li>
-      <li className={navigation.item}>
+    <nav className={navigation.nav}>
+      <div className={navigation.leftSection}>
         <Link href="/">Home</Link>
-      </li>
-      <li className={navigation.bar}></li>
-      <li className={navigation.item}>
+        <div className={navigation.bar}></div>
         <Link href="/groups">All groups</Link>
-      </li>
-      <li className={navigation.title}>
-        <Link href="/groups">CLUBSPACE</Link>
-      </li>
-      <li className={navigation.item}>
+      </div>
+
+      <div className={navigation.centerSection}>
+        <Link href="/" className={navigation.title}>
+          CLUBSPACE
+        </Link>
+      </div>
+
+      <div className={navigation.rightSection}>
         <Link href="#">Your Groups</Link>
-      </li>
-      <li className={navigation.bar}></li>
-      <li className={navigation.item}>
-        <Link href="#">Account</Link>
-      </li>
-      <li className={navigation.bar}></li>
-    </ul>
+        <div className={navigation.bar}></div>
+        <Link href="/account">Account</Link>
+      </div>
+    </nav>
   );
 }

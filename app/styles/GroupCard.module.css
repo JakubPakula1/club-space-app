@@ -4,7 +4,7 @@
   justify-content: center;
 }
 .card {
-  width: 25%;
+  width: 400px;
   height: 200px;
   border-radius: 20px;
   background-color: rgb(68, 59, 59);
