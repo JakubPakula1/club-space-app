@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState(null);
 
   const checkAuth = async () => {
     try {
@@ -14,14 +15,24 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(response.ok);
       if (response.ok) {
         setUserId(data.user.id);
+        setUsername(data.user.username);
       }
     } catch (error) {
       setIsAuthenticated(false);
+      setUserId(null);
+      setUsername(null);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userId, checkAuth }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        userId,
+        username,
+        checkAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

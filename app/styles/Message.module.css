@@ -1,0 +1,40 @@
+.message {
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  background: #2a2a2a;
+  max-width: 80%;
+}
+
+.chat {
+  align-self: flex-start;
+  border-left: 3px solid #40e0d0;
+}
+
+.system {
+  align-self: center;
+  background: #1f1d1d;
+  border: 1px solid #40e0d0;
+  font-style: italic;
+  color: #40e0d0;
+}
+
+.username {
+  display: block;
+  color: #40e0d0;
+  margin-bottom: 0.3rem;
+}
+
+.text {
+  color: white;
+  margin: 0;
+  word-wrap: break-word;
+}
+
+.timestamp {
+  display: block;
+  color: #666;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  text-align: right;
+}
