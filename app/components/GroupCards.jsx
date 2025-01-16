@@ -1,11 +1,16 @@
 "use client";
 import { useRouter } from "next/navigation";
 import groupcard from "@/app/styles/GroupCard.module.css";
-
+import { getSocket } from "@/app/utils/socket";
 export default function GroupCards({ groups }) {
+  const socket = getSocket();
   const router = useRouter();
   function handleJoin(groupId) {
     router.push(`/groups/${groupId}`);
+    socket.emit("joinRoom", {
+      username: "TestUser",
+      room: groupId,
+    });
   }
   return (
     <div className={groupcard.container}>

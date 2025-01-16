@@ -39,3 +39,48 @@
   text-decoration: none;
   font-family: var(--font-orbitron);
 }
+.accountMenu {
+  position: relative;
+  display: inline-block;
+}
+
+.accountBtn {
+  font-size: 20px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: var(--font-orbitron);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #1f1d1d;
+  border: 1px solid #40e0d0;
+  border-radius: 4px;
+  min-width: 120px;
+  z-index: 1000;
+}
+
+.dropdown a,
+.dropdown button {
+  font-size: 20px;
+  font-family: var(--font-orbitron);
+  display: block;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.dropdown a:hover,
+.dropdown button:hover {
+  background: #40e0d0;
+  color: #1f1d1d;
+}

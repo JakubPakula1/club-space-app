@@ -10,14 +10,6 @@ const Chat = ({ id }) => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    if (!isJoined) {
-      socket.emit("joinRoom", {
-        username: "TestUser",
-        room: id,
-      });
-      setIsJoined(true);
-    }
-
     socket.on("message", (msg) => {
       setMessages((prev) => [...prev, msg]);
     });

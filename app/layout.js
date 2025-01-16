@@ -2,7 +2,7 @@ import { Geist, Geist_Mono, Inter, Orbitron } from "next/font/google";
 import "./styles/globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
-
+import { AuthProvider } from "./context/AuthContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,9 +24,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={orbitron.variable}>
       <body>
-        <Navigation />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <Navigation />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
