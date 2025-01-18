@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import navigation from "@/app/styles/Navigation.module.css";
+import navigation from "./Navigation.module.css";
 import { useAuth } from "@/app/context/AuthContext";
 
 export default function Navigation() {

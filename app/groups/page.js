@@ -1,5 +1,5 @@
 "use client";
-import GroupCards from "../components/GroupCards";
+import GroupCards from "../components/GroupCards/GroupCards";
 import { useState, useEffect } from "react";
 import styles from "@/app/styles/Group.module.css";
 

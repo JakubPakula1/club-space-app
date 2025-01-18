@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "@/app/styles/FormInput.module.css";
+import styles from "./FormInput.module.css";
 
 export default function FormInput({ children, type, initialValue, onSave }) {
   const [isEditing, setIsEditing] = useState(false);

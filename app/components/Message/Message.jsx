@@ -1,4 +1,4 @@
-import styles from "@/app/styles/Message.module.css";
+import styles from "./Message.module.css";
 export default function Message({ text, username, timestamp, type = "chat" }) {
   return (
     <div className={`${styles.message} ${styles[type]}`}>

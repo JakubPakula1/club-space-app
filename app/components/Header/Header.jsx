@@ -1,5 +1,5 @@
 import Image from "next/image";
-import header from "@/app/styles/Header.module.css";
+import header from "./Header.module.css";
 export default function Header() {
   return (
     <header className={header.headerContainer}>

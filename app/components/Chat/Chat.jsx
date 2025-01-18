@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "@/app/styles/Chat.module.css";
+import styles from "./Chat.module.css";
 import { getSocket } from "@/app/utils/socket";
-import Message from "./Message";
-import { useAuth } from "../context/AuthContext";
+import Message from "../Message/Message";
+import { useAuth } from "../../context/AuthContext";
 
 const Chat = ({ id }) => {
   const socket = getSocket();

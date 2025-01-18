@@ -1,5 +1,5 @@
 "use client";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import homepage from "@/app/styles/HomePage.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";

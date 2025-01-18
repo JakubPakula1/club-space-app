@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import groupcard from "@/app/styles/GroupCard.module.css";
+import groupcard from "./GroupCard.module.css";
 
 export default function GroupCards({ groups }) {
   const router = useRouter();

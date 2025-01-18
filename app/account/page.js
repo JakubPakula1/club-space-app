@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "@/app/styles/Account.module.css";
-import FormInput from "../components/FormInput";
+import FormInput from "../components/FormInput/FormInput";
 
 export default function Account() {
   const [userData, setUserData] = useState(null);

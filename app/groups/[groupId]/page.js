@@ -1,5 +1,5 @@
 "use client";
-import Chat from "@/app/components/Chat";
+import Chat from "@/app/components/Chat/Chat";
 import { useState, useEffect } from "react";
 
 export default function Group({ params }) {
