@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, description } = body;
+    const { name, description, userId } = body;
 
     if (!name || !description) {
       return NextResponse.json(
@@ -13,12 +13,24 @@ export async function POST(req) {
       );
     }
 
-    const result = await query(
-      "INSERT INTO groups (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
+    // Rozpocznij transakcję
+    await query("BEGIN");
+
+    // Utwórz grupę
+    const groupResult = await query(
+      "INSERT INTO groups (name, description, creator_id) VALUES ($1, $2, $3) RETURNING *",
+      [name, description, userId]
     );
 
-    return NextResponse.json(result.rows[0], { status: 201 });
+    // Dodaj twórcę jako członka grupy
+    await query(
+      "INSERT INTO group_members (group_id, user_id, rank) VALUES ($1, $2, $3)",
+      [groupResult.rows[0].id, userId, "owner"]
+    );
+
+    // Zatwierdź transakcję
+    await query("COMMIT");
+    return NextResponse.json(groupResult.rows[0], { status: 201 });
   } catch (error) {
     console.error("Error creating group", error);
     return NextResponse.json(

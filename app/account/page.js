@@ -59,13 +59,6 @@ export default function Account() {
             Nazwa użytkownika
           </FormInput>
           <FormInput
-            type="email"
-            initialValue={userData.email}
-            onSave={(value) => handleSave(value, "email")}
-          >
-            Email
-          </FormInput>
-          <FormInput
             type="text"
             initialValue={userData.description}
             onSave={(value) => handleSave(value, "description")}

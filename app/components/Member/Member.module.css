@@ -1,0 +1,19 @@
+.member {
+  padding: 0.6rem;
+  background: #222121;
+  margin: 0.1rem 0;
+  border-radius: 10px;
+}
+
+.username {
+  color: #40e0d0;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.description {
+  color: #ffffff;
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}

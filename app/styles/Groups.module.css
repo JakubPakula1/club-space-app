@@ -1,0 +1,90 @@
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0px;
+}
+.button {
+  background-color: #1f1d1d;
+  border: none;
+  border-bottom: 3px solid white;
+  color: white;
+  padding: 10px;
+  font-family: var(--font-orbitron);
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.5s ease, border-bottom-color 0.5s ease;
+}
+
+.buttonActive {
+  border-bottom: 3px solid #40e0d0;
+  color: #40e0d0;
+}
+
+.formContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.formContainer h1 {
+  color: #40e0d0;
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: var(--font-orbitron);
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  color: white;
+  font-family: var(--font-orbitron);
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 10px;
+  background: #2a2a2a;
+  border: 1px solid #40e0d0;
+  border-radius: 5px;
+  color: white;
+  font-family: var(--font-orbitron);
+}
+
+.formGroup textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  background: #40e0d0;
+  border: none;
+  border-radius: 5px;
+  color: #1a1a1a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-orbitron);
+}
+
+.submitButton:hover {
+  background: #48d1cc;
+  transform: translateY(-2px);
+}
+
+.message {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  color: #40e0d0;
+  font-family: var(--font-orbitron);
+}

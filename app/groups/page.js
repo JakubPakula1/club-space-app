@@ -1,7 +1,8 @@
 "use client";
 import GroupCards from "../components/GroupCards/GroupCards";
 import { useState, useEffect } from "react";
-import styles from "@/app/styles/Group.module.css";
+import styles from "@/app/styles/Groups.module.css";
+import { useAuth } from "../context/AuthContext";
 
 export default function Groups() {
   const [name, setName] = useState("");
@@ -9,7 +10,7 @@ export default function Groups() {
   const [message, setMessage] = useState("");
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState(true);
-
+  const { userId } = useAuth();
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -17,7 +18,7 @@ export default function Groups() {
       const res = await fetch("/api/groups", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description }),
+        body: JSON.stringify({ name, description, user }),
       });
       const data = await res.json();
 
