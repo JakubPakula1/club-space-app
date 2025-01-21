@@ -10,7 +10,9 @@
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
 }
-
+.rank {
+  font-size: 0.7rem;
+}
 .description {
   color: #ffffff;
   margin: 0;

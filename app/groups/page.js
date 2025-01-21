@@ -18,7 +18,7 @@ export default function Groups() {
       const res = await fetch("/api/groups", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description, user }),
+        body: JSON.stringify({ name, description, userId }),
       });
       const data = await res.json();
 

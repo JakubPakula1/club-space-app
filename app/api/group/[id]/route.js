@@ -4,13 +4,28 @@ import { NextResponse } from "next/server";
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
-    const result = await query("SELECT * FROM groups WHERE id = $1;", [id]);
+    const groupResult = await query("SELECT * FROM groups WHERE id = $1;", [
+      id,
+    ]);
 
-    if (!result.rows[0]) {
+    const membersResult = await query(
+      `
+      SELECT u.id, u.name, u.description, gm.rank
+      FROM users u
+      JOIN group_members gm ON u.id = gm.user_id
+      WHERE gm.group_id = $1
+      ORDER BY gm.rank DESC
+    `,
+      [id]
+    );
+    if (!groupResult.rows[0]) {
       return NextResponse.json({ error: "Group not found" }, { status: 404 });
     }
 
-    return NextResponse.json(result.rows[0]);
+    return NextResponse.json({
+      group: groupResult.rows[0],
+      members: membersResult.rows,
+    });
   } catch (error) {
     console.error("Error fetching group:", error);
     return NextResponse.json(

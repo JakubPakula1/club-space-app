@@ -8,6 +8,7 @@ import Member from "@/app/components/Member/Member";
 export default function Group({ params }) {
   const [id, setId] = useState();
   const [groupData, setGroupData] = useState(null);
+  const [groupMembers, setGroupMembers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showChat, setShowChat] = useState(true);
@@ -31,7 +32,8 @@ export default function Group({ params }) {
       }
 
       const data = await res.json();
-      setGroupData(data);
+      setGroupData(data.group);
+      setGroupMembers(data.members);
     } catch (error) {
       console.error("Błąd:", error);
       setError(error.message);
@@ -54,7 +56,7 @@ export default function Group({ params }) {
   if (loading) return <div>Ładowanie...</div>;
   if (error) return <div>Błąd: {error}</div>;
   if (!groupData) return <div>Nie znaleziono grupy</div>;
-
+  console.log(groupMembers);
   return (
     <>
       <h1 className={styles.name}>{groupData.name}</h1>
@@ -87,24 +89,14 @@ export default function Group({ params }) {
         </div>
         {showChat ? <Chat id={id} /> : <Posts groupId={id} />}
         <div className={styles.right}>
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
-          <Member username="Test" description="22342424234" />
+          {groupMembers.map((member) => (
+            <Member
+              key={member.id}
+              username={member.name}
+              description={member.description || "Hi! "}
+              rank={member.rank}
+            />
+          ))}
         </div>
       </div>
     </>

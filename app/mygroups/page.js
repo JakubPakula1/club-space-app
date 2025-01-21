@@ -18,6 +18,7 @@ export default function Mygroups() {
       const data = await res.json();
 
       if (res.ok) {
+        console.log();
         setUserGroups(data);
         setIsLoading(false);
       }
