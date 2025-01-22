@@ -57,3 +57,7 @@
   background: #ff6b6b;
   color: #1f1d1d;
 }
+.inputDiv {
+  display: flex;
+  flex-direction: column;
+}

@@ -23,12 +23,15 @@ export default function FormInput({ children, type, initialValue, onSave }) {
       <label className={styles.label}>{children}: </label>
       {isEditing ? (
         <>
-          <input
-            className={styles.input}
-            value={inputData}
-            type={type}
-            onChange={(e) => setInputData(e.target.value)}
-          />
+          <div className={styles.inputDiv}>
+            <input
+              placeholder={type}
+              className={styles.input}
+              value={inputData}
+              type={type}
+              onChange={(e) => setInputData(e.target.value)}
+            />
+          </div>
           <button className={styles.button} onClick={handleEdit}>
             {isEditing ? "Save" : "Edit"}
           </button>

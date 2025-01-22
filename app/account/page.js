@@ -45,7 +45,7 @@ export default function Account() {
 
   if (loading) return <div>Ładowanie...</div>;
   if (!userData) return <div>Brak danych użytkownika</div>;
-
+  console.log(userData);
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Your Account</h1>
@@ -56,18 +56,17 @@ export default function Account() {
             initialValue={userData.name}
             onSave={(value) => handleSave(value, "name")}
           >
-            Nazwa użytkownika
+            Username
           </FormInput>
           <FormInput
             type="text"
-            initialValue={userData.description}
+            initialValue={userData.description || ""}
             onSave={(value) => handleSave(value, "description")}
           >
             Description
           </FormInput>
           <FormInput
             type="password"
-            initialValue={userData.password}
             onSave={(value) => handleSave(value, "password")}
           >
             Password

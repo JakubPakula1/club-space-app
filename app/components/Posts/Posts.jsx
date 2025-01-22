@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import styles from "./Posts.module.css";
+import Post from "../Post/Post";
 
 export default function Posts({ groupId }) {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
-  const { username } = useAuth();
 
   useEffect(() => {
     fetchPosts();
@@ -14,7 +14,10 @@ export default function Posts({ groupId }) {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch(`/api/groups/${groupId}/posts`);
+      const response = await fetch(`/api/group/${groupId}/posts`);
+      if (!response.ok) {
+        throw new Error("Błąd pobierania postów");
+      }
       const data = await response.json();
       setPosts(data);
     } catch (error) {
@@ -27,7 +30,7 @@ export default function Posts({ groupId }) {
     if (!newPost.trim()) return;
 
     try {
-      const response = await fetch(`/api/groups/${groupId}/posts`, {
+      const response = await fetch(`/api/group/${groupId}/posts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: newPost }),
@@ -58,13 +61,15 @@ export default function Posts({ groupId }) {
 
       <div className={styles.posts}>
         {posts.map((post) => (
-          <div key={post.id} className={styles.post}>
-            <div className={styles.postHeader}>
-              <strong>{post.username}</strong>
-              <small>{new Date(post.created_at).toLocaleString()}</small>
-            </div>
-            <p className={styles.content}>{post.content}</p>
-          </div>
+          <Post
+            key={post.id}
+            username={post.username}
+            content={post.content}
+            timestamp={post.timestamp}
+            likes={post.likes}
+            onLike=""
+            postId={post.id}
+          />
         ))}
       </div>
     </div>

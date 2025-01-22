@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import styles from "@/app/styles/Group.module.css";
 import { useRouter } from "next/navigation";
 import Member from "@/app/components/Member/Member";
+import Posts from "@/app/components/Posts/Posts";
 
 export default function Group({ params }) {
   const [id, setId] = useState();
@@ -43,7 +44,7 @@ export default function Group({ params }) {
   }
   const handleLeaveGroup = async () => {
     try {
-      const response = await fetch(`/api/groups/${id}/leave`, {
+      const response = await fetch(`/api/group/${id}/leave`, {
         method: "POST",
       });
       if (response.ok) {
@@ -56,7 +57,7 @@ export default function Group({ params }) {
   if (loading) return <div>Ładowanie...</div>;
   if (error) return <div>Błąd: {error}</div>;
   if (!groupData) return <div>Nie znaleziono grupy</div>;
-  console.log(groupMembers);
+
   return (
     <>
       <h1 className={styles.name}>{groupData.name}</h1>

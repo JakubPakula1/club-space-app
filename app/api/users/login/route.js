@@ -22,7 +22,6 @@ export async function POST(req) {
 
     const user = result.rows[0];
     const isValid = await bcrypt.compare(password, user.password);
-
     if (!isValid) {
       return NextResponse.json(
         { error: "Invalid login credentials" },

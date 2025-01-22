@@ -5,8 +5,19 @@ import groupcard from "./GroupCard.module.css";
 export default function GroupCards({ groups }) {
   const router = useRouter();
 
-  function handleJoin(groupId) {
-    router.push(`/groups/${groupId}`);
+  async function handleJoin(groupId) {
+    try {
+      const response = await fetch(`/api/group/${groupId}/join`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        router.push(`/groups/${groupId}`);
+      }
+    } catch (error) {
+      console.error("Błąd dołączania do grupy:", error);
+    }
   }
   return (
     <div className={groupcard.container}>

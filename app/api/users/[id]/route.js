@@ -4,9 +4,7 @@ import { query } from "@/lib/db";
 export async function GET(request, { params }) {
   try {
     const { id } = await params;
-    const result = await query("SELECT id, name FROM users WHERE id = $1", [
-      id,
-    ]);
+    const result = await query("SELECT * FROM users WHERE id = $1", [id]);
 
     if (!result.rows[0]) {
       return NextResponse.json(
