@@ -5,6 +5,7 @@ import styles from "@/app/styles/Group.module.css";
 import { useRouter } from "next/navigation";
 import Member from "@/app/components/Member/Member";
 import Posts from "@/app/components/Posts/Posts";
+import { getMQTTClient } from "@/lib/mqtt";
 
 export default function Group({ params }) {
   const [id, setId] = useState();
@@ -14,7 +15,7 @@ export default function Group({ params }) {
   const [error, setError] = useState(null);
   const [showChat, setShowChat] = useState(true);
   const router = useRouter();
-
+  const mqttClient = getMQTTClient();
   useEffect(() => {
     getGroup();
   }, []);
@@ -49,6 +50,7 @@ export default function Group({ params }) {
       });
       if (response.ok) {
         router.push("/groups");
+        mqttClient.unsubscribe(`group/${id}/posts`);
       }
     } catch (error) {
       console.error("Błąd opuszczania grupy:", error);

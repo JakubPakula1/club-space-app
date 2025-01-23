@@ -1,12 +1,13 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-
+import { getMQTTClient } from "@/lib/mqtt";
 export async function POST(req, { params }) {
   try {
     const { id } = await params;
     const { content } = await req.json();
     const token = req.cookies.get("token");
+    const mqttClient = getMQTTClient();
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -33,7 +34,22 @@ export async function POST(req, { params }) {
        RETURNING id, content, created_at`,
       [id, userId, content]
     );
+    const groupResult = await query("SELECT name FROM groups WHERE id = $1", [
+      id,
+    ]);
 
+    const groupName = groupResult.rows[0].name;
+
+    mqttClient.publish(
+      `group/${id}/posts`,
+      JSON.stringify({
+        type: "new_post",
+        username: decoded.username,
+        content: content,
+        timestamp: new Date(),
+        groupName: groupName,
+      })
+    );
     return NextResponse.json(result.rows[0], { status: 201 });
   } catch (error) {
     console.error("Error creating post:", error);

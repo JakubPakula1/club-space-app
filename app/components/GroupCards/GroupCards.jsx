@@ -1,9 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import groupcard from "./GroupCard.module.css";
+import { getMQTTClient } from "@/lib/mqtt";
 
 export default function GroupCards({ groups }) {
   const router = useRouter();
+  const mqttClient = getMQTTClient();
 
   async function handleJoin(groupId) {
     try {
@@ -14,6 +16,13 @@ export default function GroupCards({ groups }) {
 
       if (response.ok) {
         router.push(`/groups/${groupId}`);
+        mqttClient.subscribe(`group/${groupId}/posts`, (err) => {
+          if (!err) {
+            console.log("zasubskrybowano");
+          } else {
+            consloe.log(err);
+          }
+        });
       }
     } catch (error) {
       console.error("Błąd dołączania do grupy:", error);

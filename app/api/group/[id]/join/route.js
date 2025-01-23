@@ -1,11 +1,13 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { getMQTTClient } from "@/lib/mqtt";
 
 export async function POST(req, { params }) {
   try {
     const { id } = await params;
     const token = req.cookies.get("token");
+    const mqttClient = getMQTTClient();
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -30,7 +32,11 @@ export async function POST(req, { params }) {
       "INSERT INTO group_members (group_id, user_id, rank) VALUES ($1, $2, $3)",
       [id, userId, "member"]
     );
-
+    mqttClient.subscribe(`group/${id}/posts`, (err) => {
+      if (!err) {
+        console.log("zasubskrybowano");
+      }
+    });
     return NextResponse.json(
       { message: "Dołączono do grupy" },
       { status: 200 }

@@ -14,7 +14,6 @@ export async function POST(req, { params }) {
     const decoded = jwt.verify(token.value, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
-    // Sprawdź rolę użytkownika w grupie
     const memberCheck = await query(
       "SELECT rank FROM group_members WHERE group_id = $1 AND user_id = $2",
       [id, userId]
@@ -34,12 +33,10 @@ export async function POST(req, { params }) {
       );
     }
 
-    // Usuń użytkownika z grupy
     await query(
       "DELETE FROM group_members WHERE group_id = $1 AND user_id = $2",
       [id, userId]
     );
-
     return NextResponse.json({ message: "Opuszczono grupę" }, { status: 200 });
   } catch (error) {
     console.error("Error leaving group:", error);
