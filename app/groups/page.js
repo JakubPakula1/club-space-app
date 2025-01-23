@@ -10,6 +10,7 @@ export default function Groups() {
   const [message, setMessage] = useState("");
   const [groups, setGroups] = useState([]);
   const [option, setOption] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const { userId } = useAuth();
   async function handleSubmit(e) {
     e.preventDefault();
@@ -38,7 +39,11 @@ export default function Groups() {
 
   async function getGroups() {
     try {
-      const res = await fetch("/api/groups", {
+      const url = searchTerm
+        ? `/api/groups?search=${encodeURIComponent(searchTerm)}`
+        : "/api/groups";
+
+      const res = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -48,17 +53,28 @@ export default function Groups() {
         setGroups(data);
       }
     } catch (error) {
-      setMessage("Error fetching group");
+      setMessage("Error fetching groups");
       console.error(error);
     }
   }
 
   useEffect(() => {
     getGroups();
-  }, []);
+  }, [searchTerm]);
 
   return (
     <>
+      {option && (
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Szukaj grup..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+      )}
       <div className={styles.buttonContainer}>
         <button
           className={`${styles.button} ${option ? styles.buttonActive : ""}`}
