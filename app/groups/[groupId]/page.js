@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import Member from "@/app/components/Member/Member";
 import Posts from "@/app/components/Posts/Posts";
 import { getMQTTClient } from "@/lib/mqtt";
+import { useGroupRole } from "@/app/hooks/useGroupRole";
+import Modal from "@/app/components/Modal/Modal";
 
 export default function Group({ params }) {
   const [id, setId] = useState();
@@ -14,8 +16,15 @@ export default function Group({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showChat, setShowChat] = useState(true);
+  const { role } = useGroupRole(id);
   const router = useRouter();
   const mqttClient = getMQTTClient();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
   useEffect(() => {
     getGroup();
   }, []);
@@ -56,6 +65,22 @@ export default function Group({ params }) {
       console.error("Błąd opuszczania grupy:", error);
     }
   };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const response = await fetch(`/api/group/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        router.push("/groups");
+      }
+    } catch (error) {
+      console.error("Błąd usuwania grupy:", error);
+    } finally {
+      setIsDeleteModalOpen(false);
+    }
+  };
+
   if (loading) return <div>Ładowanie...</div>;
   if (error) return <div>Błąd: {error}</div>;
   if (!groupData) return <div>Nie znaleziono grupy</div>;
@@ -86,9 +111,22 @@ export default function Group({ params }) {
           </div>
           <h1 className={styles.name}>{groupData.name}</h1>
           <p className={styles.description}>{groupData.description}</p>
-          <button className={styles.leaveButton} onClick={handleLeaveGroup}>
-            Opuść grupę
-          </button>
+          {role === "owner" ? (
+            <button className={styles.leaveButton} onClick={handleDeleteClick}>
+              Delete group
+            </button>
+          ) : (
+            <button className={styles.leaveButton} onClick={handleLeaveGroup}>
+              Leave
+            </button>
+          )}
+          <Modal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteConfirm}
+            title="Delete group"
+            message="Are you sure you want to delete this group? This operation cannot be undone."
+          />
         </div>
         {showChat ? <Chat id={id} /> : <Posts groupId={id} />}
         <div className={styles.right}>

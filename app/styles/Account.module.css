@@ -24,3 +24,22 @@
   flex-direction: column;
   gap: 1rem;
 }
+.deleteSection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+}
+
+.deleteButton {
+  padding: 0.8rem 1.5rem;
+  background: transparent;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+  background: #ff4444;
+  color: #1f1d1d;
+}

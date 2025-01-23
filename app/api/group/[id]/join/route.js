@@ -32,11 +32,7 @@ export async function POST(req, { params }) {
       "INSERT INTO group_members (group_id, user_id, rank) VALUES ($1, $2, $3)",
       [id, userId, "member"]
     );
-    mqttClient.subscribe(`group/${id}/posts`, (err) => {
-      if (!err) {
-        console.log("zasubskrybowano");
-      }
-    });
+    mqttClient.subscribe(`group/${id}/posts`);
     return NextResponse.json(
       { message: "Dołączono do grupy" },
       { status: 200 }

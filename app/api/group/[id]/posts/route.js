@@ -62,7 +62,6 @@ export async function POST(req, { params }) {
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
-    console.log(id);
     const result = await query(
       `
       SELECT 
@@ -80,7 +79,6 @@ export async function GET(req, { params }) {
     `,
       [id]
     );
-    console.log(result.rows);
     return NextResponse.json(result.rows);
   } catch (error) {
     console.error("Error fetching posts:", error);

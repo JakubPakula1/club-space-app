@@ -107,3 +107,18 @@
 .right::-webkit-scrollbar-thumb:hover {
   background: #2ea89b;
 }
+.deleteButton {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: transparent;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+  background: #ff4444;
+  color: #1f1d1d;
+}

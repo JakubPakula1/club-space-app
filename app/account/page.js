@@ -2,10 +2,31 @@
 import { useState, useEffect } from "react";
 import styles from "@/app/styles/Account.module.css";
 import FormInput from "../components/FormInput/FormInput";
+import Modal from "@/app/components/Modal/Modal";
+import { useRouter } from "next/navigation";
 
 export default function Account() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const router = useRouter();
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch("/api/users/delete", {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error("Błąd usuwania konta:", error);
+    } finally {
+      setIsDeleteModalOpen(false);
+    }
+  };
+
   const fetchUserData = async () => {
     try {
       const response = await fetch("/api/users/auth");
@@ -45,7 +66,7 @@ export default function Account() {
 
   if (loading) return <div>Ładowanie...</div>;
   if (!userData) return <div>Brak danych użytkownika</div>;
-  console.log(userData);
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Your Account</h1>
@@ -73,6 +94,22 @@ export default function Account() {
           </FormInput>
         </form>
       </div>
+      <div className={styles.deleteSection}>
+        <button
+          className={styles.deleteButton}
+          onClick={() => setIsDeleteModalOpen(true)}
+        >
+          Delete account
+        </button>
+      </div>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteAccount}
+        title="Delete account"
+        message="Are you sure you want to delete your account? This operation cannot be undone."
+      />
     </div>
   );
 }
