@@ -37,7 +37,7 @@ export default function Navigation() {
       </div>
 
       <div className={navigation.rightSection}>
-        <Link href="mygroups">My Groups</Link>
+        <Link href="/mygroups">My Groups</Link>
         <div className={navigation.bar}></div>
         <div className={navigation.accountMenu}>
           <button
