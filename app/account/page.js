@@ -50,7 +50,7 @@ export default function Account() {
   const handleSave = async (newValue, field) => {
     try {
       const response = await fetch("/api/users/update", {
-        method: "PUT",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [field]: newValue }),
       });

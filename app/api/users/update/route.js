@@ -3,7 +3,7 @@ import { query } from "@/lib/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export async function PUT(req) {
+export async function PATCH(req) {
   try {
     const data = await req.json();
     const token = req.cookies.get("token");
@@ -18,12 +18,7 @@ export async function PUT(req) {
     }
 
     const result = await query(
-      `
-      UPDATE users 
-      SET ${field} = $1 
-      WHERE id = $2 
-      RETURNING *
-    `,
+      `UPDATE users SET ${field} = $1 WHERE id = $2 RETURNING *`,
       [value, userId]
     );
 
