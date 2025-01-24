@@ -99,6 +99,7 @@ export default function Post({
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Dodaj komentarz..."
+              required
               className={styles.commentInput}
             />
             <button type="submit" className={styles.submitButton}>
