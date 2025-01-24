@@ -6,23 +6,60 @@ Projekt stworzony przez **Jakub Pakuła** w ramach zaliczenia zajęć.
 
 **ClubSpace** to nowoczesna aplikacja społecznościowa, która pozwala użytkownikom na łączenie się w grupy tematyczne, wymianę wiadomości oraz eksplorację wspólnych zainteresowań. Stworzona z myślą o łatwym dostępie, interaktywności i wygodzie użytkownika.
 
-## 🔍 Funkcje
+## Spis treści
 
-- **Grupy tematyczne**: Tworzenie, dołączanie i zarządzanie grupami zainteresowań.
-- **Czat na żywo**: Wymiana wiadomości w czasie rzeczywistym z wykorzystaniem WebSocket.
-- **Role użytkowników**: Zarządzanie dostępem dzięki rolom (administrator, moderator, członek, gość).
-- **Wyszukiwanie**: Intuicyjne wyszukiwanie grup i treści.
-- **Bezpieczeństwo**: Bezpieczne logowanie i zarządzanie kontami użytkowników.
+- [Funkcjonalności](#funkcjonalności)
+- [Technologie](#technologie)
 
-## 🛠️ Stos technologiczny
+## Funkcjonalności
 
-- **Frontend**: Next.js (React)
-- **Backend**: API Routes w Next.js
-- **Real-time komunikacja**: WebSocket i MQTT
+### Operacje CRUD
 
-## 🎯 TODO
+- **Użytkownicy:**
+  - Rejestracja i logowanie (JWT)
+  - Edycja profilu
+  - Usuwanie konta
+- **Grupy:**
+  - Tworzenie grup
+  - Dołączanie do grup
+  - Usuwanie grup
+- **Posty:**
+  - Dodawanie postów
+  - Przeglądanie postów
+  - Polubienia postów
 
-- [ ] Zaimplementować role użytkowników.
-- [ ] Dodać możliwość wyszukiwania grup.
-- [ ] Wdrożyć system powiadomień o nowych wiadomościach.
-- [ ] Rozbudować dokumentację API.
+### Komunikacja w czasie rzeczywistym
+
+- **WebSocket:**
+  - Chat w czasie rzeczywistym
+  - System pokojów czatu
+- **MQTT:**
+  - Powiadomienia o nowych postach
+  - Subskrypcja/unsubskrypcja grup
+
+### Wyszukiwanie
+
+- Wyszukiwanie grup według wzorca (RESTful)
+- Filtrowanie grup po nazwie i opisie
+
+### Role i uprawnienia
+
+- Owner (właściciel grupy)
+- Member (członek)
+- Różne poziomy dostępu do funkcjonalności
+
+### Bezpieczeństwo
+
+- JWT do autoryzacji
+- Szyfrowanie haseł (bcrypt)
+- Zabezpieczenie endpointów
+- Walidacja danych
+
+## Technologie
+
+- Next.js
+- PostgreSQL
+- MQTT
+- WebSocket
+- JWT
+- bcrypt
