@@ -53,3 +53,54 @@
   background: #40e0d0;
   color: #1f1d1d;
 }
+.comments {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #40e0d0;
+}
+
+.commentForm {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.commentInput {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #40e0d0;
+  border-radius: 4px;
+  background: #2a2a2a;
+  color: white;
+}
+
+.submitButton {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid #40e0d0;
+  color: #40e0d0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comment {
+  color: white;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-left: 2px solid #40e0d0;
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.commentButton {
+  background: transparent;
+  border: none;
+  color: #40e0d0;
+  cursor: pointer;
+  margin-left: 1rem;
+}
