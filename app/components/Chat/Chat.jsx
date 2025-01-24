@@ -12,6 +12,7 @@ const Chat = ({ id }) => {
   const { username } = useAuth();
 
   useEffect(() => {
+    fetchMessages();
     socket.emit("joinRoom", {
       username,
       room: id,
@@ -19,6 +20,7 @@ const Chat = ({ id }) => {
 
     socket.on("message", (msg) => {
       console.log("Otrzymana wiadomość:", msg);
+      saveMessage(msg);
       setMessages((prev) => [...prev, msg]);
     });
 
@@ -35,6 +37,37 @@ const Chat = ({ id }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(`/api/group/${id}/messages`);
+      if (response.ok) {
+        const data = await response.json();
+        const correctData = data.map((message) => ({
+          username: message.username,
+          text: message.content,
+          timestamp: message.created_at,
+        }));
+        setMessages(correctData);
+      }
+    } catch (error) {
+      console.error("Błąd pobierania wiadomości:", error);
+    }
+  };
+
+  const saveMessage = async (messageData) => {
+    try {
+      await fetch(`/api/group/${id}/messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: messageData.text,
+          username: messageData.username,
+        }),
+      });
+    } catch (error) {
+      console.error("Błąd zapisywania wiadomości:", error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();

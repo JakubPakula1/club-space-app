@@ -48,3 +48,11 @@ CREATE TABLE likes (
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE(post_id, user_id)
 );
+
+CREATE TABLE messages (
+    id SERIAL PRIMARY KEY,
+    group_id INT NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
