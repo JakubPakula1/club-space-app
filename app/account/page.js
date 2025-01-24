@@ -18,7 +18,7 @@ export default function Account() {
       });
 
       if (response.ok) {
-        router.push("/login");
+        router.push("/auth");
       }
     } catch (error) {
       console.error("Błąd usuwania konta:", error);
