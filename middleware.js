@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export function middleware(request) {
   const token = request.cookies.get("token");
   const path = request.nextUrl.pathname;
-  const isProtectedRoute = ["/groups", "/account"].some((p) =>
+  const isProtectedRoute = ["/groups", "/account", "/mygroups"].some((p) =>
     path.startsWith(p)
   );
 
@@ -17,5 +17,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/groups/:path*", "/account/:path*"],
+  matcher: ["/groups/:path*", "/account/:path*", "/mygroups/:path*"],
 };

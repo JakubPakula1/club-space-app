@@ -10,6 +10,8 @@ const Chat = ({ id }) => {
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef(null);
   const { username } = useAuth();
+  const [typingUsers, setTypingUsers] = useState(new Set());
+  const typingTimeoutRef = useRef(null);
 
   useEffect(() => {
     fetchMessages();
@@ -20,13 +22,29 @@ const Chat = ({ id }) => {
 
     socket.on("message", (msg) => {
       console.log("Otrzymana wiadomość:", msg);
-      saveMessage(msg);
+      if (msg.type === "chat") {
+        saveMessage(msg);
+      }
       setMessages((prev) => [...prev, msg]);
+    });
+
+    socket.on("userTyping", (data) => {
+      setTypingUsers((prev) => new Set([...prev, data.username]));
+    });
+
+    socket.on("userStopTyping", (data) => {
+      setTypingUsers((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(data.username);
+        return newSet;
+      });
     });
 
     return () => {
       socket.off("message");
       socket.emit("leaveRoom", { room: id });
+      socket.off("userTyping");
+      socket.off("userStopTyping");
     };
   }, []);
 
@@ -34,9 +52,19 @@ const Chat = ({ id }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleTyping = () => {
+    socket.emit("typing", { room: id, username });
+    console.log("test");
+    clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("stopTyping", { room: id, username });
+    }, 2000);
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
   const fetchMessages = async () => {
     try {
       const response = await fetch(`/api/group/${id}/messages`);
@@ -94,12 +122,19 @@ const Chat = ({ id }) => {
           </div>
         ))}
       </div>
-
+      <div className={styles.typingIndicator}>
+        {Array.from(typingUsers).map((user) => (
+          <span key={user}>{user} pisze...</span>
+        ))}
+      </div>
       <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="text"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => {
+            setMessage(e.target.value);
+            handleTyping();
+          }}
           placeholder="Napisz wiadomość..."
           className={styles.input}
         />

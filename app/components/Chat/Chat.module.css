@@ -60,3 +60,9 @@
   color: #1f1d1d;
   cursor: pointer;
 }
+.typingIndicator {
+  font-size: 0.8em;
+  color: #666;
+  padding: 5px;
+  min-height: 20px;
+}

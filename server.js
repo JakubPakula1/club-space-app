@@ -36,6 +36,14 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("typing", ({ room, username }) => {
+    io.in(room).emit("userTyping", { username });
+  });
+
+  socket.on("stopTyping", ({ room, username }) => {
+    io.in(room).emit("userStopTyping", { username });
+  });
+
   socket.on("chatMessage", ({ room, message }) => {
     console.log(`mam message ${message} z pokoju ${room}`);
     io.to(room).emit("message", {
