@@ -19,3 +19,18 @@
   font-size: 0.9rem;
   opacity: 0.8;
 }
+.status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 5px;
+  background-color: #ccc;
+}
+
+.online {
+  background-color: #4caf50;
+}
+.statusText {
+  margin-left: 15px;
+}

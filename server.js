@@ -10,6 +10,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+const activeUsers = new Map();
 
 io.on("connection", (socket) => {
   console.log("New socket connection:", socket.id);
@@ -29,10 +30,13 @@ io.on("connection", (socket) => {
 
     console.log(`Użytkownik ${username} dołączył do pokoju ${room}`);
 
-    socket.to(room).emit("message", {
-      type: "system",
-      text: `${username} dołączył do pokoju`,
-      timestamp: new Date(),
+    if (!activeUsers.has(room)) {
+      activeUsers.set(room, new Set());
+    }
+    activeUsers.get(room).add(username);
+    console.log(activeUsers);
+    io.to(room).emit("activeUsers", {
+      users: Array.from(activeUsers.get(room)),
     });
   });
 
@@ -57,12 +61,16 @@ io.on("connection", (socket) => {
   // Opuszczanie pokoju
   socket.on("leaveRoom", () => {
     if (socket.currentRoom) {
-      socket.to(socket.currentRoom).emit("message", {
-        type: "system",
-        text: `${socket.username} opuścił pokój`,
-        timestamp: new Date(),
-      });
       socket.leave(socket.currentRoom);
+    }
+    if (socket.currentRoom && socket.username) {
+      const roomUsers = activeUsers.get(socket.currentRoom);
+      if (roomUsers) {
+        roomUsers.delete(socket.username);
+        io.to(socket.currentRoom).emit("activeUsers", {
+          users: Array.from(roomUsers),
+        });
+      }
     }
   });
 
@@ -74,6 +82,15 @@ io.on("connection", (socket) => {
         text: `${socket.username} został rozłączony`,
         timestamp: new Date(),
       });
+    }
+    if (socket.currentRoom && socket.username) {
+      const roomUsers = activeUsers.get(socket.currentRoom);
+      if (roomUsers) {
+        roomUsers.delete(socket.username);
+        io.to(socket.currentRoom).emit("activeUsers", {
+          users: Array.from(roomUsers),
+        });
+      }
     }
     console.log("Client disconnected:", socket.id);
   });

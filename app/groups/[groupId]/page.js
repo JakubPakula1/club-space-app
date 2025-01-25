@@ -8,8 +8,10 @@ import Posts from "@/app/components/Posts/Posts";
 import { getMQTTClient } from "@/lib/mqtt";
 import { useGroupRole } from "@/app/hooks/useGroupRole";
 import Modal from "@/app/components/Modal/Modal";
+import { getSocket } from "@/app/utils/socket";
 
 export default function Group({ params }) {
+  const socket = getSocket();
   const [id, setId] = useState();
   const [groupData, setGroupData] = useState(null);
   const [groupMembers, setGroupMembers] = useState(null);
@@ -136,6 +138,8 @@ export default function Group({ params }) {
               username={member.name}
               description={member.description || "Hi! "}
               rank={member.rank}
+              socket={socket}
+              roomId={id}
             />
           ))}
         </div>
