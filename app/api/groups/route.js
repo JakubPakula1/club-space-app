@@ -1,14 +1,22 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
+import logger from "@/lib/logger";
 
 export async function POST(req) {
   try {
     const body = await req.json();
     const { name, description, userId } = body;
 
+    logger.info("Attempting to create group", { userId, name });
+
     if (!name || !description) {
+      logger.warn("Missing required fields in group creation", {
+        name: !!name,
+        description: !!description,
+        userId,
+      });
       return NextResponse.json(
-        { error: "Missing requred fields" },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
@@ -26,11 +34,21 @@ export async function POST(req) {
     );
 
     await query("COMMIT");
+
+    logger.info("Group created successfully", {
+      groupId: groupResult.rows[0].id,
+      userId,
+      name,
+    });
+
     return NextResponse.json(groupResult.rows[0], { status: 201 });
   } catch (error) {
-    console.error("Error creating group", error);
+    logger.error("Error creating group", {
+      error: error.message,
+      stack: error.stack,
+    });
     return NextResponse.json(
-      { error: "Internal Sever Error" },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
@@ -40,6 +58,8 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const searchTerm = searchParams.get("search");
+
+    logger.info("Fetching groups", { searchTerm });
 
     let queryString = "SELECT * FROM groups";
     let queryParams = [];
@@ -54,9 +74,14 @@ export async function GET(req) {
     }
 
     const result = await query(queryString, queryParams);
+
+    logger.info("Groups fetched successfully", { count: result.rows.length });
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error("Error:", error);
+    logger.error("Error fetching groups", {
+      error: error.message,
+      stack: error.stack,
+    });
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

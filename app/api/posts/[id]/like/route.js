@@ -1,6 +1,7 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import logger from "@/lib/logger";
 
 export async function POST(req, { params }) {
   try {
@@ -8,11 +9,14 @@ export async function POST(req, { params }) {
     const token = req.cookies.get("token");
 
     if (!token) {
+      logger.warn("Attempt to like post without token", { postId: id });
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const decoded = jwt.verify(token.value, process.env.JWT_SECRET);
     const userId = decoded.userId;
+
+    logger.info("Attempting to toggle like", { userId, postId: id });
 
     const existingLike = await query(
       "SELECT id FROM likes WHERE post_id = $1 AND user_id = $2",
@@ -24,6 +28,7 @@ export async function POST(req, { params }) {
         id,
         userId,
       ]);
+      logger.info("Like removed successfully", { userId, postId: id });
       return NextResponse.json({ liked: false });
     }
 
@@ -32,9 +37,14 @@ export async function POST(req, { params }) {
       userId,
     ]);
 
+    logger.info("Like added successfully", { userId, postId: id });
     return NextResponse.json({ liked: true });
   } catch (error) {
-    console.error("Error toggling like:", error);
+    logger.error("Error toggling like", {
+      error: error.message,
+      stack: error.stack,
+      postId: id,
+    });
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import logger from "@/lib/logger";
 
 export async function PATCH(req) {
   try {
@@ -13,6 +14,12 @@ export async function PATCH(req) {
     const field = Object.keys(data)[0];
     let value = data[field];
 
+    logger.info("Attempting to update user field", {
+      userId,
+      field,
+      valueLength: value?.length || 0,
+    });
+
     if (field === "password") {
       value = await bcrypt.hash(value, 10);
     }
@@ -23,16 +30,25 @@ export async function PATCH(req) {
     );
 
     if (!result.rows[0]) {
-      return NextResponse.json(
-        { error: "Użytkownik nie znaleziony" },
-        { status: 404 }
-      );
+      logger.warn("User not found during update", { userId });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    logger.info("User updated successfully", {
+      userId,
+      field,
+    });
 
     const { password, ...userData } = result.rows[0];
     return NextResponse.json(userData);
   } catch (error) {
-    console.error("Błąd aktualizacji:", error);
-    return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+    logger.error("Error updating user", {
+      error: error.message,
+      stack: error.stack,
+    });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

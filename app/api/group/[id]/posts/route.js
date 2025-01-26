@@ -2,6 +2,8 @@ import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getMQTTClient } from "@/lib/mqtt";
+import logger from "@/lib/logger";
+
 export async function POST(req, { params }) {
   try {
     const { id } = await params;
@@ -10,11 +12,14 @@ export async function POST(req, { params }) {
     const mqttClient = getMQTTClient();
 
     if (!token) {
+      logger.warn("Attempt to create post without token", { groupId: id });
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const decoded = jwt.verify(token.value, process.env.JWT_SECRET);
     const userId = decoded.userId;
+
+    logger.info("Attempting to create post", { userId, groupId: id });
 
     const memberCheck = await query(
       "SELECT rank FROM group_members WHERE group_id = $1 AND user_id = $2",
@@ -22,8 +27,12 @@ export async function POST(req, { params }) {
     );
 
     if (!memberCheck.rows[0]) {
+      logger.warn("Non-member attempted to create post", {
+        userId,
+        groupId: id,
+      });
       return NextResponse.json(
-        { error: "Nie jesteś członkiem tej grupy" },
+        { error: "You are not a member of this group" },
         { status: 403 }
       );
     }
@@ -34,10 +43,10 @@ export async function POST(req, { params }) {
        RETURNING id, content, created_at`,
       [id, userId, content]
     );
+
     const groupResult = await query("SELECT name FROM groups WHERE id = $1", [
       id,
     ]);
-
     const groupName = groupResult.rows[0].name;
 
     mqttClient.publish(
@@ -50,21 +59,34 @@ export async function POST(req, { params }) {
         groupName: groupName,
       })
     );
+
+    logger.info("Post created successfully", {
+      userId,
+      groupId: id,
+      postId: result.rows[0].id,
+    });
+
     return NextResponse.json(result.rows[0], { status: 201 });
   } catch (error) {
-    console.error("Error creating post:", error);
+    logger.error("Error creating post", {
+      error: error.message,
+      stack: error.stack,
+      groupId: id,
+    });
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
     );
   }
 }
+
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
+    logger.info("Fetching posts for group", { groupId: id });
+
     const result = await query(
-      `
-      SELECT 
+      `SELECT 
         p.id,
         p.content,
         p.created_at as timestamp,
@@ -79,9 +101,19 @@ export async function GET(req, { params }) {
     `,
       [id]
     );
+
+    logger.info("Posts fetched successfully", {
+      groupId: id,
+      count: result.rows.length,
+    });
+
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    logger.error("Error fetching posts", {
+      error: error.message,
+      stack: error.stack,
+      groupId: id,
+    });
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
