@@ -1,3 +1,4 @@
+"use clinet";
 import { useEffect, useRef, useState } from "react";
 import styles from "./Chat.module.css";
 import { getSocket } from "@/app/utils/socket";

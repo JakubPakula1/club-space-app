@@ -10,6 +10,7 @@ export default function Post({
   likes,
   onLike,
   postId,
+  userRank,
 }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(likes || 0);
@@ -88,7 +89,19 @@ export default function Post({
       console.error("Błąd dodawania komentarza:", error);
     }
   };
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: "DELETE",
+      });
 
+      if (response.ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Błąd usuwania posta:", error);
+    }
+  };
   return (
     <div className={styles.post}>
       <div className={styles.header}>
@@ -96,6 +109,15 @@ export default function Post({
         <small className={styles.timestamp}>
           {new Date(timestamp).toLocaleString()}
         </small>
+        {userRank === "owner" && (
+          <button
+            onClick={handleDelete}
+            className={styles.deleteButton}
+            title="Usuń post"
+          >
+            ❌
+          </button>
+        )}
       </div>
       <p className={styles.content}>{content}</p>
       <div className={styles.footer}>

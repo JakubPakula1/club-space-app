@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/app/context/AuthContext";
+import { useGroupRole } from "@/app/hooks/useGroupRole";
 import styles from "./Posts.module.css";
 import Post from "../Post/Post";
 
 export default function Posts({ groupId }) {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
-
+  const { loading, role, error } = useGroupRole(groupId);
   useEffect(() => {
     fetchPosts();
   }, [groupId]);
@@ -69,6 +69,7 @@ export default function Posts({ groupId }) {
             likes={post.likes}
             onLike=""
             postId={post.id}
+            userRank={role}
           />
         ))}
       </div>

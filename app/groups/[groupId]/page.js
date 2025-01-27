@@ -1,6 +1,6 @@
 "use client";
 import Chat from "@/app/components/Chat/Chat";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import styles from "@/app/styles/Group.module.css";
 import { useRouter } from "next/navigation";
 import Member from "@/app/components/Member/Member";
@@ -11,13 +11,20 @@ import Modal from "@/app/components/Modal/Modal";
 import { getSocket } from "@/app/utils/socket";
 
 export default function Group({ params }) {
+  const { groupId } = use(params);
   const socket = getSocket();
   const [id, setId] = useState();
   const [groupData, setGroupData] = useState(null);
   const [groupMembers, setGroupMembers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showChat, setShowChat] = useState(true);
+  const [showChat, setShowChat] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(`tab-${groupId}`);
+      return saved ? JSON.parse(saved) : true;
+    }
+    return true;
+  });
   const { role } = useGroupRole(id);
   const router = useRouter();
   const mqttClient = getMQTTClient();
@@ -25,6 +32,10 @@ export default function Group({ params }) {
 
   const handleDeleteClick = () => {
     setIsDeleteModalOpen(true);
+  };
+  const handleTabChange = (isChat) => {
+    setShowChat(isChat);
+    localStorage.setItem(`tab-${id}`, JSON.stringify(isChat));
   };
 
   useEffect(() => {
@@ -98,7 +109,7 @@ export default function Group({ params }) {
               className={`${styles.switchButton} ${
                 showChat ? styles.switchButtonActive : ""
               }`}
-              onClick={() => setShowChat(true)}
+              onClick={() => handleTabChange(true)}
             >
               Chat
             </button>
@@ -106,7 +117,7 @@ export default function Group({ params }) {
               className={`${styles.switchButton} ${
                 !showChat ? styles.switchButtonActive : ""
               }`}
-              onClick={() => setShowChat(false)}
+              onClick={() => handleTabChange(false)}
             >
               Posts
             </button>
