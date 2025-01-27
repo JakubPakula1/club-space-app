@@ -92,7 +92,7 @@ export default function Post({
   return (
     <div className={styles.post}>
       <div className={styles.header}>
-        <h3 className={styles.postUsername}>{postUsername}</h3>
+        <h3 className={styles.username}>{postUsername}</h3>
         <small className={styles.timestamp}>
           {new Date(timestamp).toLocaleString()}
         </small>

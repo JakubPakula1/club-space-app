@@ -1,12 +1,13 @@
 "use client";
 import { useEffect } from "react";
 import { getMQTTClient } from "@/lib/mqtt";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Orbitron } from "next/font/google";
 import "./styles/globals.css";
 import Navigation from "./components/Navigation/Navigation";
 import Footer from "./components/Footer/Footer";
 import { AuthProvider } from "./context/AuthContext";
+import ToasterProvider from "./components/ToasterProvider/ToasterProvider";
 const orbitron = Orbitron({
   variable: "--font-orbitron",
   subsets: ["latin"],
@@ -46,32 +47,7 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <Navigation />
           {children}
-          <Toaster
-            position="top-right"
-            reverseOrder={false}
-            gutter={8}
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: "#363636",
-                color: "#fff",
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: "#4caf50",
-                  secondary: "#fff",
-                },
-              },
-              error: {
-                duration: 4000,
-                iconTheme: {
-                  primary: "#f44336",
-                  secondary: "#fff",
-                },
-              },
-            }}
-          />
+          <ToasterProvider />
           <Footer />
         </AuthProvider>
       </body>

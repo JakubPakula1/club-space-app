@@ -6,9 +6,18 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    origin: [
+      "https://localhost",
+      "http://localhost:8080",
+      "https://localhost:443",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Content-Range", "X-Content-Range"],
   },
+  secure: true,
+  transports: ["websocket", "polling"],
 });
 const activeUsers = new Map();
 
