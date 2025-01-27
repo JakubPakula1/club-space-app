@@ -1,6 +1,7 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import logger from "@/lib/logger";
+import { getMQTTClient } from "@/lib/mqtt";
 
 export async function POST(req) {
   try {
@@ -40,6 +41,16 @@ export async function POST(req) {
       userId,
       name,
     });
+
+    const mqttClient = getMQTTClient();
+    mqttClient.publish(
+      "groups/new",
+      JSON.stringify({
+        id: groupResult.rows[0].id,
+        name: groupResult.rows[0].name,
+        description: groupResult.rows[0].description,
+      })
+    );
 
     return NextResponse.json(groupResult.rows[0], { status: 201 });
   } catch (error) {

@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "./Post.module.css";
-
+import { publishReaction } from "@/lib/mqtt";
+import { useAuth } from "@/app/context/AuthContext";
 export default function Post({
-  username,
+  postUsername,
   content,
   timestamp,
   likes,
@@ -15,11 +16,20 @@ export default function Post({
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
-
+  const { username } = useAuth();
+  const handleReaction = (emoji) => {
+    if (username) {
+      publishReaction(postId, emoji, username);
+    }
+  };
   useEffect(() => {
     fetchComments();
-  }, [showComments]);
+    checkIfLiked();
+  }, [showComments, postId]);
   const handleLike = async () => {
+    if (!isLiked) {
+      handleReaction("❤️");
+    }
     try {
       const response = await fetch(`/api/posts/${postId}/like`, {
         method: "POST",
@@ -48,6 +58,18 @@ export default function Post({
     }
   };
 
+  const checkIfLiked = async () => {
+    try {
+      const response = await fetch(`/api/posts/${postId}/likes`);
+      if (response.ok) {
+        const data = await response.json();
+        setIsLiked(data.isLiked);
+      }
+    } catch (error) {
+      console.error("Błąd sprawdzania polubienia:", error);
+    }
+  };
+
   const handleAddComment = async (e) => {
     e.preventDefault();
     try {
@@ -70,7 +92,7 @@ export default function Post({
   return (
     <div className={styles.post}>
       <div className={styles.header}>
-        <h3 className={styles.username}>{username}</h3>
+        <h3 className={styles.postUsername}>{postUsername}</h3>
         <small className={styles.timestamp}>
           {new Date(timestamp).toLocaleString()}
         </small>
@@ -110,7 +132,7 @@ export default function Post({
           {comments.map((comment) => (
             <div key={comment.id} className={styles.comment}>
               <div className={styles.commentHeader}>
-                <strong>{comment.username}</strong>
+                <strong>{comment.postUsername}</strong>
                 <small>{new Date(comment.created_at).toLocaleString()}</small>
               </div>
               <p>{comment.content}</p>

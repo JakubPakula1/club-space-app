@@ -63,7 +63,7 @@ export default function Posts({ groupId }) {
         {posts.map((post) => (
           <Post
             key={post.id}
-            username={post.username}
+            postUsername={post.username}
             content={post.content}
             timestamp={post.timestamp}
             likes={post.likes}
